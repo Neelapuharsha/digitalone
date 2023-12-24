@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnings Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin-top: 50px;
+        }
+
+        .input-container {
+            display: flex;
+            margin-bottom: 10px;
+            
+            
+        }
+
+        input {
+            padding: 8px;
+            width: 100px;
+            margin-left:20px;
+        }
+
+        .suffix {
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #currentEarnings, #remainingEarnings{
+        display:inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Earnings Calculator</h2>
+
+    <label for="dailyTarget">Daily Target Amount (Rs):</label>
+    <input type="number" id="dailyTarget" placeholder="Enter target amount" oninput="calculateRemaining()">
+    <hr>
+
+    <div class="input-container">
+        <label for="captchasCount">Captchas Completed:</label>
+        <div>
+        <input type="number" id="captchasCount" placeholder="Enter count" oninput="calculateRemaining()">
+        <span id="remainingCaptchas" class="suffix">/0</span>
+    </div>
+    </div>
+
+    <div class="input-container">
+        <label for="dataEntriesCount">Data Entries Completed:</label>
+        <div>
+        <input type="number" id="dataEntriesCount" placeholder="Enter count" oninput="calculateRemaining()">
+        <span id="remainingDataEntries" class="suffix">/0</span>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <label for="formsCount">Forms Completed:</label>
+        <div>
+        <input type="number" id="formsCount" placeholder="Enter count" oninput="calculateRemaining()">
+        <span id="remainingForms" class="suffix">/0</span>
+        </div>
+    </div>
+
+    <h3>Earnings Summary:</h3>
+    <p id="currentEarnings">Current Earnings: 0/</p>
+    <p id="remainingEarnings">0 Rs(remaining)</p>
+
+    <script>
+        function calculateRemaining() {
+            var dailyTarget = parseInt(document.getElementById('dailyTarget').value) || 0;
+            var captchasCount = parseInt(document.getElementById('captchasCount').value) || 0;
+            var dataEntriesCount = parseInt(document.getElementById('dataEntriesCount').value) || 0;
+            var formsCount = parseInt(document.getElementById('formsCount').value) || 0;
+
+            var captchasRate = 60 / 1000; // Rs per captcha
+            var dataEntriesRate = 1000 / 1000; // Rs per data entry
+            var formsRate = 1500 / 1000; // Rs per form
+
+            var currentEarnings = (captchasCount * captchasRate) + (dataEntriesCount * dataEntriesRate) + (formsCount * formsRate);
+
+            var remainingCaptchas = Math.ceil(Math.max(0, dailyTarget - currentEarnings) / captchasRate);
+            var remainingDataEntries = Math.ceil(Math.max(0, dailyTarget - currentEarnings) / dataEntriesRate);
+            var remainingForms = Math.ceil(Math.max(0, dailyTarget - currentEarnings) / formsRate);
+
+            document.getElementById('remainingCaptchas').textContent = '/' + remainingCaptchas;
+            document.getElementById('remainingDataEntries').textContent = '/' + remainingDataEntries;
+            document.getElementById('remainingForms').textContent = '/' + remainingForms;
+
+            document.getElementById('currentEarnings').textContent = 'Current Earnings: ' + currentEarnings.toFixed(2) + ' Rs';
+
+            var remainingEarnings = Math.max(0, dailyTarget - currentEarnings);
+            document.getElementById('remainingEarnings').textContent ="/"+ remainingEarnings.toFixed(2) + ' Rs (remaining)';
+        }
+    </script>
+
+</body>
+</html>
